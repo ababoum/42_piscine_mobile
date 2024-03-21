@@ -17,12 +17,15 @@ class _MainAppState extends State<MainApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Calculator'),
+          title: const Center(child: Text('Calculator')),
+          backgroundColor: Colors.blue, // Set the background color to blue
         ),
         body: const Column(
           children: [
             CalculatorScreen(),
-            CalculatorKeyboard(),
+            // Expanded(
+            //   child: CalculatorKeyboard(),
+            // ),
           ],
         ),
       ),
@@ -36,42 +39,48 @@ class CalculatorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.grey,
-        child: const Column(
-          children: [
-            Text('0', style: TextStyle(fontSize: 48)),
-            Text('0', style: TextStyle(fontSize: 48))
-          ],
-        ));
+      color: Colors.grey,
+      child: const Column(
+        children: [
+          Text('7', style: TextStyle(fontSize: 48)),
+          Text('7', style: TextStyle(fontSize: 48))
+        ],
+      ),
+    );
   }
 }
 
 class CalculatorKeyboard extends StatelessWidget {
   const CalculatorKeyboard({super.key});
 
+  static List<List<String>> buttonRows = [
+    ['7', '8', '9', 'C', 'AC'],
+    ['4', '5', '6', '+', '-'],
+    ['1', '2', '3', '*', '/'],
+    ['0', '.', '00', '=', ''],
+  ];
+  static double totalHeight =
+      buttonRows.length * 64.0; // Assuming each row has a height of 64.0
+
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 4,
-      children: [
-        CalculatorButton(text: 'C', color: Colors.red, onPressed: () {}),
-        CalculatorButton(text: '7', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '8', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '9', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '4', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '5', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '6', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '1', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '2', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '3', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '0', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '.', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '+', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '-', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: 'x', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '/', color: Colors.grey, onPressed: () {}),
-        CalculatorButton(text: '=', color: Colors.blue, onPressed: () {}),
-      ],
+    return SizedBox(
+      height: totalHeight, // Set the height of the SizedBox
+      child: GridView.count(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisCount: 5,
+        children: buttonRows
+            .map((row) => row
+                .map((text) => CalculatorButton(
+                      text: text,
+                      color: Colors.grey,
+                      onPressed: () {},
+                    ))
+                .toList())
+            .expand((element) => element)
+            .toList(),
+      ),
     );
   }
 }
